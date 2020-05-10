@@ -39,11 +39,11 @@ async def test(ctx, *, arg):
 async def ask(ctx, *, arg):
     x = randint(0,6)
     messages = ["Im gonna go with yes.", 
-                "I mean, I'm not your parent soooo.", 
-                "TBH, you do you.", 
+                "I mean, I could go either way, but yea I guess.", 
+                "TBH idk mate.", 
                 "Please stop asking me questions. Geez.", 
-                "Nah, I'm not feeling this one.", 
-                "Sure whatever. Doesn't matter to me.", 
+                "Nah, I'm feeling no on this one.", 
+                "Yea whatever. If I say yes will you be happy?", 
                 "Are you serious? Of course not."]
     await ctx.send(messages[x])
 
@@ -51,7 +51,7 @@ async def ask(ctx, *, arg):
 @client.command()
 async def flip(ctx):
     x=randint(0,1)
-    messages=["Heads", "Tails"]
+    messages=["HEADS\nhttps://tenor.com/view/champagne-heads-tails-heads-or-tails-coin-gif-13943298", "TAILS\nhttps://tenor.com/view/champagne-heads-tails-heads-or-tails-coin-gif-13943297"]
     await ctx.send(messages[x])
 
 @client.command()
@@ -115,7 +115,17 @@ async def joke(ctx):
 @client.command()
 @commands.has_role("Unverified")
 async def verify(ctx, *, arg):
-    from sheets import col
+    # from sheets import col
+    import gspread
+    from oauth2client.service_account import ServiceAccountCredentials
+
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("drive.json", scope)
+
+    driveClient = gspread.authorize(creds)
+
+    sheet = driveClient.open("Verification").sheet1
+    col = sheet.col_values(2)
     if arg in col:
         role = discord.utils.get(ctx.guild.roles, name='Unverified')
         await ctx.message.author.remove_roles(role)
