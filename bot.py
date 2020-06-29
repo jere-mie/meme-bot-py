@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from random import randint
-from imageStuff import makeMeme
+from imagestuff2 import makeMeme
 from pyjokes import get_joke
 import json
 
@@ -10,6 +10,54 @@ with open('secrets.json') as f:
 
 client = commands.Bot(command_prefix='!')
 client.remove_command("help")
+
+commands_list={
+    "help": "`!help <command>`\nDisplays details about a specific command, or all commands if <command> field is empty",
+    "meme": "`!meme <name of meme> <text>`\nCreates a meme based on the name of the meme you provided, and the text you input.\nAcceptable meme names can be found by typing `!memes`\nNote: If you just want the template, put 'template' as your text.",
+    "memes": "`!memes`\nDisplays the list of acceptable meme names",
+    "anon": "`!anon <text>`\nSends a message anonymously (deletes the command)",
+    "joke": "`!joke`\nDisplays a random programming joke",
+    "ask": "`!ask <text>`\nAsk advice or a yes/no question to the all-knowing meme bot and see its response",
+    "flip": "`!flip`\nFlips a coin (heads or tails)",
+    "roll": "`!roll <num>`\nRolls a die with <num> sides",
+    "verify": "`!verify <Full Name>`\nVerifies you into the server if you are registered via the Google Form",
+    "purge": "`!purge <limit>`\n**ADMIN ONLY!**\nDeletes a certain number of messages"
+}
+
+memesList="""
+~arthur
+~chungus
+~coffee
+~comingtogether
+~crazysponge
+~disgust
+~drake
+~everyoneisstupid
+~funnysponge
+~futurama
+~imin
+~meandtheboys
+~nice
+~noyouaint
+~ohyea
+~okconnor
+~patrick
+~pikachu
+~poorsquid
+~professional
+~sadcat
+~sadgry
+~sadsponge
+~smugsponge
+~spiderman
+~spongemock
+~stark
+~stonks
+~thisisfine
+~tom
+~uh
+"""
+
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
@@ -26,14 +74,7 @@ async def on_message(message):
         return
     await client.process_commands(message)
 
-
-@client.command()
-async def foo(ctx, arg):
-    await ctx.send(arg)
-
-@client.command()
-async def test(ctx, *, arg):
-    await ctx.send(arg)
+# Commands
 
 @client.command()
 async def ask(ctx, *, arg):
@@ -71,35 +112,27 @@ async def meme(ctx, fname, *, text):
     makeMeme(fname, text)
     await ctx.send(file=discord.File('out.png'))
 
+# Thank you to Wahid Bawa for allowing me to use his code for this help menu
+# View his code here: https://github.com/UWindsor-Robotics-Tech/UWin-Robotics-Robot/blob/master/robot/main.py
 @client.command()
-async def help(ctx):
-    text="""
-***MEME BOT HELP MENU***
-List of Commands:
+async def help(ctx, *, command=None):
+    embed = discord.Embed(title="HELP", colour=0xcccc00)
+    if command is None:
+        for i in commands_list:
+            embed.add_field(name=i, value=commands_list[i], inline=False)
+    elif command in commands_list:
+        embed.add_field(name=command, value=commands_list[command], inline=False)
+    else:
+        await ctx.send("This is not an existing command")
+        return
+    await ctx.send(embed=embed)
 
-**!help**
-Displays the help menu
-**!joke**
-Displays a random programming joke
-**!anon <text>**
-Sends a message anonymously (deletes the command)
-**!ask <text>**
-Ask advice or a yes/no question to the all-knowing meme bot and see it's response
-**!flip**
-Flips a coin (heads or tails)
-**!roll <num>**
-Rolls a die with <num> sides
-**!verify <Full Name>**
-Verifies you into the server if you are registered via the Google Form
-**!purge <limit>**
-ADMIN ONLY!
-Deletes a certain number of messages
-**!meme <name of meme> <text>**
-Creates a meme based on the name of the meme you provided, and the text you input.
-Acceptable meme names are: chungus, coffee, comingtogether, crazysponge, drake, imin, nice, sadcat, sadgry, sadsponge, tom, uh
-*Note: If you just want the template, put 'template' as your text.* 
-"""
-    await ctx.send(text)
+
+@client.command()
+async def memes(ctx):
+    embed = discord.Embed(title="LIST OF MEMES", colour=0xcccc00)
+    embed.add_field(name="Memes List", value=memesList, inline=False)
+    await ctx.send(embed=embed)
 
 
 @client.command()
