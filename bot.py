@@ -21,7 +21,8 @@ commands_list={
     "flip": "`!flip`\nFlips a coin (heads or tails)",
     "roll": "`!roll <num>`\nRolls a die with <num> sides",
     "verify": "`!verify <Full Name>`\nVerifies you into the server if you are registered via the Google Form",
-    "purge": "`!purge <limit>`\n**ADMIN ONLY!**\nDeletes a certain number of messages"
+    "purge": "`!purge <limit>`\n**ADMIN ONLY!**\nDeletes a certain number of messages",
+    "ping":"`!ping`\nDisplays latency in ms"
 }
 
 memesList="""
@@ -88,6 +89,14 @@ async def ask(ctx, *, arg):
                 "Are you serious? Of course not."]
     await ctx.send(messages[x])
 
+@client.command()
+async def ping(ctx):
+    await ctx.send(f"Latency: {round(client.latency * 1000)}ms")
+
+
+@client.command()
+async def ziad(ctx):
+    await ctx.send("```kobti```")
 
 @client.command()
 async def flip(ctx):
