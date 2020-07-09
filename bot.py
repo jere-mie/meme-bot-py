@@ -93,6 +93,10 @@ async def ask(ctx, *, arg):
 async def ping(ctx):
     await ctx.send(f"Latency: {round(client.latency * 1000)}ms")
 
+@client.command()
+async def ping(ctx):
+    await ctx.send(f"Lootency: {round(client.latency * 1000000)}months")
+
 
 @client.command()
 async def ziad(ctx):
