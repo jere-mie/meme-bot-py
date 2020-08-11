@@ -94,7 +94,7 @@ async def ping(ctx):
     await ctx.send(f"Latency: {round(client.latency * 1000)}ms")
 
 @client.command()
-async def ping(ctx):
+async def pong(ctx):
     await ctx.send(f"Lootency: {round(client.latency * 1000000)}months")
 
 
