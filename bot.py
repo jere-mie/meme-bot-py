@@ -126,6 +126,14 @@ async def hidify(ctx, *, arg):
         output+="||"+i+"||"
     await ctx.send(output)
 
+# thank you to Wahid Bawa for the following command 
+# from https://github.com/UWindsor-Robotics-Tech/UWin-Robotics-Robot/blob/master/robot/main.py
+@client.command()
+async def searchify(ctx, *, searchTerm):
+    link = "https://lmgtfy.com/?q="
+    link += searchTerm.replace(" ", "+")
+    await ctx.send(link)
+
 @client.command()
 async def meme(ctx, fname, *, text):
     if text=='template':
