@@ -119,6 +119,14 @@ async def anon(ctx, *, arg):
     await ctx.send(arg)
 
 @client.command()
+async def hidify(ctx, *, arg):
+    await ctx.message.delete()
+    output = ""
+    for i in arg:
+        output+="||"+i+"||"
+    await ctx.send(output)
+
+@client.command()
 async def meme(ctx, fname, *, text):
     if text=='template':
         text=''
