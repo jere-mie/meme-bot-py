@@ -22,6 +22,8 @@ commands_list={
     "roll": "`!roll <num>`\nRolls a die with <num> sides",
     "verify": "`!verify <Full Name>`\nVerifies you into the server if you are registered via the Google Form",
     "purge": "`!purge <limit>`\n**ADMIN ONLY!**\nDeletes a certain number of messages",
+    "hidify": "`!hidify <phrase>`\nMarks each character of your message in spoilers",
+    "bigify": "`!bigify <letters>`\nMakes each letter in your phrase bigger",
     "ping":"`!ping`\nDisplays latency in ms"
 }
 
@@ -117,6 +119,18 @@ async def roll(ctx, arg):
 async def anon(ctx, *, arg):
     await ctx.message.delete()
     await ctx.send(arg)
+
+@client.command()
+async def bigify(ctx, *, arg):
+    await ctx.message.delete()
+    output=""
+    for i in arg:
+        if i==' ':
+            output+='   '
+        else:
+            output+=':regional_indicator_'+i+': '
+    await ctx.send(output)
+
 
 @client.command()
 async def hidify(ctx, *, arg):
