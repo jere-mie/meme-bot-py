@@ -2,3 +2,5 @@ secrets.json
 drive.json
 __pycache__/
 venv/
+out.png
+.vscode/

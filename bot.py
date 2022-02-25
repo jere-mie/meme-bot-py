@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from random import randint
-from imagestuff2 import makeMeme
+from memeMaker import makeMeme
 from pyjokes import get_joke
 import json
 
@@ -66,12 +66,6 @@ async def on_ready():
     print('We have logged in as {0.user}'.format(client))
 
 @client.event
-async def on_member_join(member):
-    role = discord.utils.get(member.guild.roles, name="Unverified")
-    await member.add_roles(role)
-
-
-@client.event
 async def on_message(message):
     if message.author == client.user:
         return
@@ -128,17 +122,17 @@ async def bigify(ctx, *, arg):
         if i==' ':
             output+='   '
         else:
-            output+=':regional_indicator_'+i+': '
+            output+=':regional_indicator_'+i.lower()+': '
     await ctx.send(output)
 
 
 @client.command()
 async def hidify(ctx, *, arg):
     await ctx.message.delete()
-    output = ""
+    output = "`"
     for i in arg:
         output+="||"+i+"||"
-    await ctx.send(output)
+    await ctx.send(output+'`')
 
 # thank you to Wahid Bawa for the following command 
 # from https://github.com/UWindsor-Robotics-Tech/UWin-Robotics-Robot/blob/master/robot/main.py
@@ -186,27 +180,5 @@ async def purge(ctx, arg):
 @client.command()
 async def joke(ctx):
     await ctx.send(get_joke())
-
-
-@client.command()
-@commands.has_role("Unverified")
-async def verify(ctx, *, arg):
-    # from sheets import col
-    import gspread
-    from oauth2client.service_account import ServiceAccountCredentials
-
-    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name("drive.json", scope)
-
-    driveClient = gspread.authorize(creds)
-
-    sheet = driveClient.open("Verification").sheet1
-    col = sheet.col_values(2)
-    if arg in col:
-        role = discord.utils.get(ctx.guild.roles, name='Unverified')
-        await ctx.message.author.remove_roles(role)
-        role = discord.utils.get(ctx.guild.roles, name='Verified')
-        await ctx.message.author.add_roles(role)
-        await ctx.message.delete()
     
 client.run(data['token'])

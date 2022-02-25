@@ -1,6 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont
 
-
 def makeMeme(fname, text):
     image = Image.open(f'images/{fname}.png')
     size=45
@@ -29,5 +28,3 @@ def makeMeme(fname, text):
         draw.text(xy=((512-w1)/2,0), text=text[0:x], fill=(0,0,0), font=font)
         draw.text(xy=((512-w2)/2,42), text=text[x:len(text)], fill=(0,0,0), font=font)
     image.save('out.png')
-    
-# makeMeme('chungus', 'Hello World')
