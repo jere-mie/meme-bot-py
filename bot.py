@@ -20,7 +20,6 @@ commands_list={
     "ask": "`!ask <text>`\nAsk advice or a yes/no question to the all-knowing meme bot and see its response",
     "flip": "`!flip`\nFlips a coin (heads or tails)",
     "roll": "`!roll <num>`\nRolls a die with <num> sides",
-    "verify": "`!verify <Full Name>`\nVerifies you into the server if you are registered via the Google Form",
     "purge": "`!purge <limit>`\n**ADMIN ONLY!**\nDeletes a certain number of messages",
     "hidify": "`!hidify <phrase>`\nMarks each character of your message in spoilers",
     "bigify": "`!bigify <letters>`\nMakes each letter in your phrase bigger",
