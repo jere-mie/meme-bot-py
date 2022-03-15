@@ -1,4 +1,15 @@
 from PIL import Image, ImageDraw, ImageFont
+from io import BytesIO
+
+async def makeMemeAsync(client, fname, text):
+    event_loop = client.loop
+
+    return await event_loop.run_in_executor(
+        None,
+        makeMeme,
+        fname,
+        text
+    )
 
 def makeMeme(fname, text):
     image = Image.open(f'images/{fname}.png')
@@ -27,4 +38,7 @@ def makeMeme(fname, text):
         w2,h2 = font.getsize(text[x:len(text)])
         draw.text(xy=((512-w1)/2,0), text=text[0:x], fill=(0,0,0), font=font)
         draw.text(xy=((512-w2)/2,42), text=text[x:len(text)], fill=(0,0,0), font=font)
-    image.save('out.png')
+    out = BytesIO()
+    image.save(out, "png")
+    out.seek(0)
+    return out
