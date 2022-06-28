@@ -23,7 +23,8 @@ commands_list={
     "purge": "`!purge <limit>`\n**ADMIN ONLY!**\nDeletes a certain number of messages",
     "hidify": "`!hidify <phrase>`\nMarks each character of your message in spoilers",
     "bigify": "`!bigify <letters>`\nMakes each letter in your phrase bigger",
-    "ping":"`!ping`\nDisplays latency in ms"
+    "ping":"`!ping`\nDisplays latency in ms",
+    "deez": "`!deez`\nDisplays 'nuts'"
 }
 
 memesList="""
@@ -180,4 +181,8 @@ async def purge(ctx, arg):
 async def joke(ctx):
     await ctx.send(get_joke())
     
+@client.command()
+async def deez(ctx):
+    await ctx.send("nuts")
+
 client.run(data['token'])
