@@ -1,9 +1,13 @@
 import discord
 from discord.ext import commands
 from random import randint
-from memeMaker import makeMeme
+from memeMaker import makeMeme, makeMemeAsync
 from pyjokes import get_joke
 import json
+
+from os.path import splitext, split
+from glob import glob
+from converters import MemeTemplateConverter
 
 with open('secrets.json') as f:
   data = json.load(f)
@@ -27,39 +31,17 @@ commands_list={
     "deez": "`!deez`\nDisplays 'nuts'"
 }
 
-memesList="""
-~arthur
-~chungus
-~coffee
-~comingtogether
-~crazysponge
-~disgust
-~drake
-~everyoneisstupid
-~funnysponge
-~futurama
-~imin
-~meandtheboys
-~nice
-~noyouaint
-~ohyea
-~okconnor
-~patrick
-~pikachu
-~poorsquid
-~professional
-~sadcat
-~sadgry
-~sadsponge
-~smugsponge
-~spiderman
-~spongemock
-~stark
-~stonks
-~thisisfine
-~tom
-~uh
-"""
+
+def loadTemplates():
+    rawAllTemplates = glob("./images/*.png")
+    return [
+        splitext(
+            split(t)[1]             # Splitting the folders from the file name
+        )[0]                        # Removing the extension of said file name
+        for t in rawAllTemplates 
+    ]
+
+client.memesList = loadTemplates() # Dyanmically load meme template
 
 @client.event
 async def on_ready():
@@ -143,11 +125,13 @@ async def searchify(ctx, *, searchTerm):
     await ctx.send(link)
 
 @client.command()
-async def meme(ctx, fname, *, text):
-    if text=='template':
-        text=''
-    makeMeme(fname, text)
-    await ctx.send(file=discord.File('out.png'))
+async def meme(ctx, fname : MemeTemplateConverter, *, text):
+    
+    imageBytes = await makeMemeAsync(client, fname, text) # Runs the original function in an executor since the original function is blocking
+
+    await ctx.send(
+        file = discord.File(imageBytes, filename = "meme.png") # Remove the need to actually write to a file and send it again
+    )
 
 # Thank you to Wahid Bawa for allowing me to use his code for this help menu
 # View his code here: https://github.com/UWindsor-Robotics-Tech/UWin-Robotics-Robot/blob/master/robot/main.py
@@ -168,7 +152,7 @@ async def help(ctx, *, command=None):
 @client.command()
 async def memes(ctx):
     embed = discord.Embed(title="LIST OF MEMES", colour=0xcccc00)
-    embed.add_field(name="Memes List", value=memesList, inline=False)
+    embed.add_field(name="Memes List", value="\n".join(f"!{n}" for n in client.memesList), inline=False)
     await ctx.send(embed=embed)
 
 
